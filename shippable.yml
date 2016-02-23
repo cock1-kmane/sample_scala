@@ -4,13 +4,13 @@ scala:
     - 2.11.0
 
 build:
-  pre_ci:
-    - docker build -t=shippabledocker/shiphitchcock1_sample_scala .
+ # pre_ci:
+ #   - docker build -t=shippabledocker/shiphitchcock1_sample_scala .
 
   pre_ci_boot:
-    image_name: shippabledocker/shiphitchcock1_sample_scala
-    image_tag: latest
-    pull: false
+    image_name: drydock/u14scapls
+    image_tag: prod
+    pull: true
     options: '--privileged=true --net=bridge -e FOO=true -e BOO=false'
 
  # ci:
