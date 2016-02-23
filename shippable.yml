@@ -3,11 +3,29 @@ language: scala
 scala:
     - 2.11.0
 
-script:
-  - export SBT_OPTS="-XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M"
-  - sbt clean scoverage:test
+build:
+  pre_ci:
+    - docker build -t=shippabledocker/shiphitchcock1_sample_scala .
 
-after_script:
-  - mkdir -p shippable/codecoverage
-  - mv target/scala-2.11/coverage-report/cobertura.xml $PWD/shippable/codecoverage/
+  pre_ci_boot:
+    image_name: shippabledocker/shiphitchcock1_sample_scala
+    image_tag: latest
+    pull: false
+    options: '--privileged=true --net=bridge -e FOO=true -e BOO=false'
 
+  ci:
+    #- ps -eax
+    #- ls -al
+    - export SBT_OPTS="-XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M"
+    - sbt clean scoverage:test
+    - mkdir -p shippable/codecoverage
+    - mv target/scala-2.11/coverage-report/cobertura.xml $PWD/shippable/codecoverage/
+
+  post_ci:
+    - docker push shippabledocker/shiphitchcock1_sample_scala
+    
+integrations:
+  hub:
+    - integrationName: ship-docker
+      type: docker
+      
