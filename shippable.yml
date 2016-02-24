@@ -7,7 +7,7 @@ scala:
 
 build:
 
- # ci:
+  ci:
     #- ps -eax
     #- ls -al
     - export SBT_OPTS="-XX:+CMSClassUnloadingEnabled -XX:PermSize=256M -XX:MaxPermSize=512M"
